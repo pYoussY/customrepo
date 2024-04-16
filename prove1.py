@@ -14,18 +14,22 @@ warehouses = ['WarehouseA', 'WarehouseB', 'WarehouseC']
 
 x = pulp.LpVariable.dicts("shipment", ((f, w) for f in factories for w in warehouses), lowBound=0, cat='Continuous')
 
+
 # Define objective function
 # We aim to minimize the total transportation cost
 prob += 10*x[('Factory1', 'WarehouseA')] + 12*x[('Factory1', 'WarehouseB')] + 15*x[('Factory1', 'WarehouseC')] \
       + 9*x[('Factory2', 'WarehouseA')] + 11*x[('Factory2', 'WarehouseB')] + 13*x[('Factory2', 'WarehouseC')]
 # Define supply constraints for each factory
-prob += x[('Factory1','WarehouseA')] + x[('Factory1','WarehouseB')] + x[('Factory1','WarehouseC')] <= 20
-prob += x[('Factory2','WarehouseA')] + x[('Factory2','WarehouseB')] + x[('Factory2','WarehouseC')] <= 30
+prob += x[('Factory1','WarehouseA')] + x[('Factory1','WarehouseB')] + x[('Factory1','WarehouseC')] == 50
+prob += x[('Factory2','WarehouseA')] + x[('Factory2','WarehouseB')] + x[('Factory2','WarehouseC')] == 60
 
 # Define demand constraints for each warehouse
-prob += x[('Factory1','WarehouseA')] + x[('Factory2','WarehouseA')] >= 10
-prob += x[('Factory1','WarehouseB')] + x[('Factory2','WarehouseB')] >= 20
-prob += x[('Factory1','WarehouseC')] + x[('Factory2','WarehouseC')] >= 30
+prob += x[('Factory1','WarehouseA')] >= 5
+prob += x[('Factory2','WarehouseA')] >= 10
+prob += x[('Factory1','WarehouseB')] >= 5
+prob += x[('Factory2','WarehouseB')] >= 20
+prob += x[('Factory1','WarehouseC')] >= 10
+prob += x[('Factory2','WarehouseC')] >= 30
 
 # Solve the problem
 prob.solve()
